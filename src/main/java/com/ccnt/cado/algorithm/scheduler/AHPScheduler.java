@@ -17,24 +17,24 @@ public class AHPScheduler implements AppScheduler{
 		return null;
 	}
 	public List<Deploy> doSchedule(SystemMonitor monitor,PlatformInfo platformInfo) {
-		Logger.info("AHP调度器执行调度，阈值max="+platformInfo.getPlatformUsageMax()+", min="+platformInfo.getPlatformUsageMin());
+		//Logger.info("AHP调度器执行调度，阈值max="+platformInfo.getPlatformUsageMax()+", min="+platformInfo.getPlatformUsageMin());
 		int platformId = (Integer)monitor.getFetcher().getPlatformByInfoId(platformInfo.get_id()).get("_id");
 		Unit weigh = new Unit(platformInfo.getCpuWeight(), platformInfo.getMemoryWeight(), platformInfo.getIoWeight(), platformInfo.getNetworkWeight());
 		List<Deploy> deployList = monitor.getFetcher().getDeployUnitsData(platformId);
 		List<VM> vmList = monitor.getFetcher().getVMsData(platformId);
 		SysState state = monitor.computeSysState(platformInfo.getPlatformUsageMax(), platformInfo.getPlatformUsageMin(),platformId,weigh);
-		Logger.info("计算系统当前状态      评分："+state.getScore() +" 使用率："+state.getUsage() +"  方差："+state.getVariance());
+		//Logger.info("计算系统当前状态      评分："+state.getScore() +" 使用率："+state.getUsage() +"  方差："+state.getVariance());
 		if(state.getUsage() > platformInfo.getPlatformUsageMax()){
 			
 			//系统状态超过阈值，迁移
-			Logger.info("-----------------------------------------------------");
-			Logger.info("系统状态超过阈值，做迁移....");
+			//Logger.info("-----------------------------------------------------");
+			//Logger.info("系统状态超过阈值，做迁移....");
 			double tmp = state.getUsage();
 			while(tmp > platformInfo.getPlatformUsageMax()){
 				VM from = monitor.getTop(vmList, ahpWeigh);
-				Logger.info("占用率最高的虚拟机："+from.getVmId());
+				//Logger.info("占用率最高的虚拟机："+from.getVmId());
 				Deploy d = monitor.computeMostConsume(from, deployList, ahpWeigh);
-				Logger.info("虚拟机"+from.getVmId()+"上最消耗资源的应用："+d.getUnitId());
+				//Logger.info("虚拟机"+from.getVmId()+"上最消耗资源的应用："+d.getUnitId());
 				//找压力最小的一台部署
 				int minVmId = Integer.MAX_VALUE;
 				double minPressure = Double.MAX_VALUE;
@@ -50,12 +50,12 @@ public class AHPScheduler implements AppScheduler{
 				}
 				VM to = getVmById(minVmId, vmList);
 				if(minPressure == Double.MAX_VALUE){
-					Logger.info("无法合并！");
+					//Logger.info("无法合并！");
 					break;
 				}
 				migrate(d, to,from);
 				SysState ss = monitor.computeCurrentState(vmList, platformInfo.getPlatformUsageMax(), platformInfo.getPlatformUsageMin(),weigh);
-				Logger.info("迁移后系统  评分" + ss.getScore() +"  使用率："+ss.getUsage() +" 方差："+ss.getVariance());
+				//Logger.info("迁移后系统  评分" + ss.getScore() +"  使用率："+ss.getUsage() +" 方差："+ss.getVariance());
 				break;
 			}
 		}else if(state.getUsage() < platformInfo.getPlatformUsageMin()){
@@ -81,9 +81,9 @@ public class AHPScheduler implements AppScheduler{
 		return result;
 	}
 	public AHPScheduler(Unit ahpWeigh){
-		Logger.info("[INFO]初始化AHP调度器....权值：" +
-				"cpu="+ahpWeigh.getCpu()+", memory="+ahpWeigh.getMemeory()+
-				" ,net="+ ahpWeigh.getNet()+", io="+ahpWeigh.getIo());
+		//Logger.info("[INFO]初始化AHP调度器....权值：" +
+				//"cpu="+ahpWeigh.getCpu()+", memory="+ahpWeigh.getMemeory()+
+				//" ,net="+ ahpWeigh.getNet()+", io="+ahpWeigh.getIo());
 		this.ahpWeigh = ahpWeigh;
 	}
 	
@@ -93,9 +93,9 @@ public class AHPScheduler implements AppScheduler{
 			if(d.getVmId() == vm2.getVmId()){
 				if(canMigrate(d, vm1)){
 					this.migrate(d, vm1,vm2);
-					Logger.info("将应用"+d.getUnitId() +"从"+vm2.getVmId()+"合并到"+vm1.getVmId());
+					//Logger.info("将应用"+d.getUnitId() +"从"+vm2.getVmId()+"合并到"+vm1.getVmId());
 				}else{
-					Logger.error("目标主机没有可用空间，迁移失败");
+					//Logger.error("目标主机没有可用空间，迁移失败");
 				}
 			}
 		}
@@ -117,10 +117,10 @@ public class AHPScheduler implements AppScheduler{
 	//将应用迁移到另一台虚拟机
 	public void migrate(Deploy from, VM to, VM fromVm){
 		if(!canMigrate(from, to)){
-			Logger.info("可用空间不足，迁移失败，请重新开启虚拟机。。。");
+			//Logger.info("可用空间不足，迁移失败，请重新开启虚拟机。。。");
 			return;
 		}
-		Logger.info("[INFO]从虚拟机"+fromVm.getVmId()+"迁移应用"+from.getUnitId()+"到虚拟机"+to.getVmId());
+		//Logger.info("[INFO]从虚拟机"+fromVm.getVmId()+"迁移应用"+from.getUnitId()+"到虚拟机"+to.getVmId());
 		Unit used = to.getUsedMetrics();
 		Unit deploy = from.getMetrics();
 		used.addUnit(deploy);
@@ -138,7 +138,7 @@ public class AHPScheduler implements AppScheduler{
 	//计算虚拟机部署应用的压力值
 	public double deployPressure(Deploy d, VM vm){
 		if(!canMigrate(d, vm)){
-			Logger.info("主机"+vm.getVmId()+"空间不足，无法部署"+d.getUnitId());
+			//Logger.info("主机"+vm.getVmId()+"空间不足，无法部署"+d.getUnitId());
 			return -1;
 		}
 		Unit used = vm.getUsedMetrics();
