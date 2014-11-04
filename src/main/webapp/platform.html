@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<!--jQuery References--> 
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+		<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.min.js" type="text/javascript"></script>
+
+		<!--Theme-->
+		<link href="http://cdn.wijmo.com/themes/aristo/jquery-wijmo.css" rel="stylesheet" type="text/css" />
+
+		<!--Wijmo Widgets CSS-->
+		<link href="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.css" rel="stylesheet" type="text/css" />
+
+		<!--Wijmo Widgets JavaScript-->
+		<script src="http://cdn.wijmo.com/jquery.wijmo-open.all.3.20142.45.min.js" type="text/javascript"></script>
+		<script src="http://cdn.wijmo.com/jquery.wijmo-pro.all.3.20142.45.min.js" type="text/javascript"></script>
+		<script src="http://cdn.wijmo.com/interop/wijmo.data.ajax.3.20142.45.js" type="text/javascript"></script>
+		 
+		<!--Knockout JS Library-->
+		<script src="http://cdn.wijmo.com/external/knockout-3.1.0.js" type="text/javascript"></script>
+		  
+		<!--Wijmo Knockout Integration Library-->
+		<script src="http://cdn.wijmo.com/interop/knockout.wijmo.3.20142.45.js" type="text/javascript"></script>
+
+		<script src="js/platform.js" type="text/javascript" charset="utf-8"></script>
+		<style type="text/css">
+			table{
+				margin:0 auto; 
+			}
+			th,td{
+				padding:10px 20px; 
+			}
+			select{
+				width: 175px;
+			}
+		</style>
+	</head>
+	<body>
+		<form id="platformForm">
+		<input type="hidden" id="platformId" name="_id" data-bind="value: _id">
+		<div id="baseInfo">
+		    <h3>基本信息</h3>
+		    <div style="height: 200px">
+		    	<table>
+		    		<tr>
+		    			<th>平台类型</th>
+		    			<th>
+		    				<select id="platformClass" name="platformClass" data-bind="value: platformClass">
+		    					<option selected="selected" value="cloudify">cloudify</option>
+		    				</select>
+		    			</th>
+		    			<th>平台版本</th>
+		    			<th>
+		    				<select id="platformVersion" name="platformVer" data-bind="value: platformVer">
+		    					<option selected="selected" value="2.7.0">2.7.0</option>
+		    				</select>
+		    			</th>
+		    		</tr>
+		    		<tr>
+		    			<th>平台名称</th>
+		    			<th><input type="text" class="inputtext" name="platformName" data-bind="value: platformName"></th>
+		    			<th>地址</th>
+		    			<th><input type="text" class="inputtext" name="platformAddr" data-bind="value: platformAddr"></th>
+		    		</tr>
+		    		<tr>
+		    			<th>端口</th>
+		    			<th><input type="text" class="inputtext" name="platformPort" data-bind="value: platformPort"></th>
+		    		</tr>
+		    	</table>
+		    </div>
+		</div>
+		<div id="dataFetchArg">
+		    <h3>数据获取参数</h3>
+		    <div style="height: 150px">
+		    	<table>
+		    		<tr>
+		    			<th>主机数据获取周期（s）</th>
+		    			<th><input type="text" class="inputnumber" name="hostDataFetchCycle" data-bind="value: hostDataFetchCycle"></th>
+		    			<th>应用数据获取周期（s）</th>
+		    			<th><input type="text" class="inputnumber" name="appDataFetchCycle" data-bind="value: appDataFetchCycle"></th>
+		    		</tr>
+		    		<tr>
+		    			<th>主机监控周期（s）</th>
+		    			<th><input type="text" class="inputnumber" name="hostMonitorCycle" data-bind="value: hostMonitorCycle"></th>
+		    			<th>应用数据监控周期（s）</th>
+		    			<th><input type="text" class="inputnumber" name="appMonitorCycle" data-bind="value: appMonitorCycle"></th>
+		    		</tr>
+		    	</table>
+		    </div>
+		</div>
+		<div id="dataHandleArg">
+		    <h3>数据处理参数</h3>
+		    <div style="height: 200px">
+		    	<table>
+		    		<tr>
+		    			<th>系统使用率最大值（%）</th>
+		    			<th><input type="text" class="inputnumber" name="platformUsageMax" data-bind="value: platformUsageMax"></th>
+		    			<th>系统使用率最小值（%）</th>
+		    			<th><input type="text" class="inputnumber" name="platformUsageMin" data-bind="value: platformUsageMin"></th>
+		    		</tr>
+		    		<tr>
+		    			<th>CPU指标权重</th>
+		    			<th><input type="text" class="inputnumber" name="cpuWeight" data-bind="value: cpuWeight"></th>
+		    			<th>内存指标权重</th>
+		    			<th><input type="text" class="inputnumber" name="memoryWeight" data-bind="value: memoryWeight"></th>
+		    		</tr>
+		    		<tr>
+		    			<th>IO指标权重</th>
+		    			<th><input type="text" class="inputnumber" name="ioWeight" data-bind="value: ioWeight"></th>
+		    			<th>网络指标权重</th>
+		    			<th><input type="text" class="inputnumber" name="networkWeight" data-bind="value: networkWeight"></th>
+		    		</tr>
+		    	</table>
+		    </div>
+		</div>
+		<div style="text-align:center;padding:10px 0px">
+			<button type="button" id="formUpdate">修改</button>
+		</div>
+		</form>
+	</body>
+</html>
