@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,7 +27,7 @@ public class DataFetchService implements CadoService{
 		platformCache = new HashMap<Integer,MonitorObject>();
 	}
 
-	@PostConstruct 
+
 	public void start() {
 		dataFetchScheduler.start();
 		dataStorer.dropAll();
@@ -39,7 +37,7 @@ public class DataFetchService implements CadoService{
 		}
 	}
 	
-	@PreDestroy
+
 	public void stop() {
 		dataFetchScheduler.stop();
 	}
