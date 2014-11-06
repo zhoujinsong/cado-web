@@ -17,7 +17,7 @@ $(document).ready(function () {
 		$.ajax({
 			cache: true,
 			type: "POST",
-			url: "platformManagement.do?method=updatePlatform",
+			url: "../platformManagement.do?method=updatePlatform",
 			data: $("#platformForm").serialize(),
 			error: function(request){
 				alert("修改平台失败！");
@@ -52,7 +52,7 @@ var viewModel = {
 //functions
 function initial(){
 	var platformId = getQueryStr(window.document.location.href,"platformId");
-	$.get("platformManagement.do?method=getPlatform&platformId=" + platformId,function(data,status){
+	$.get("../
 		viewModel._id(data._id);
 		viewModel.platformClass(data.platformClass);
 		viewModel.platformVer(data.platformVer);

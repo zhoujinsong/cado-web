@@ -17,7 +17,7 @@ $(document).ready(function () {
 		$.ajax({
 			cache: true,
 			type: "POST",
-			url: "platformManagement.do?method=createPlatform",
+			url: "../platformManagement.do?method=createPlatform",
 			data: $("#newPlatformForm").serialize(),
 			error: function(request){
 				alert("新增平台失败！");
