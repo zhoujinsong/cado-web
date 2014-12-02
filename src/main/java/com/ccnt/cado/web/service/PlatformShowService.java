@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.ccnt.cado.algorithm.scheduler.SchedulerService;
+import com.ccnt.cado.algorithm.scheduler.AppSchedulerService;
 import com.ccnt.cado.datastorage.DataStorer;
 
 @Service("platformShowService")
@@ -17,7 +17,7 @@ public class PlatformShowService {
 	private DataStorer dataStorer;
 	
 	@Autowired
-	private SchedulerService schedulerService;
+	private AppSchedulerService schedulerService;
 	
 	@Autowired
 	public PlatformShowService(@Qualifier("mongoDataStorer")DataStorer dataStorer) {
@@ -81,6 +81,7 @@ public class PlatformShowService {
 	}
 	
 	public double getSystemUsage(int platformInfoId){
-		return schedulerService.getSysMonitor().getPlatformUsage(platformInfoId);
+		return 0.0;
+		//return schedulerService.getSysMonitor().getPlatformUsage(platformInfoId);
 	}
 }

@@ -2,10 +2,15 @@ package com.ccnt.cado.algorithm.scheduler;
 
 import java.util.List;
 
-import com.ccnt.cado.algorithm.data.Deploy;
+import com.ccnt.cado.algorithm.data.MigrateStep;
 import com.ccnt.cado.algorithm.monitor.SystemMonitor;
 import com.ccnt.cado.web.bean.PlatformInfo;
 
 public interface AppScheduler {
-	public List<Deploy> doSchedule(SystemMonitor monitor,PlatformInfo platformInfo);
+	//迁移
+	public List<MigrateStep> Migrate(SystemMonitor monitor, Predictor predictor,
+			PlatformInfo platformInfo);
+	//合并
+	public List<MigrateStep> Merge(SystemMonitor monitor, Predictor predictor,
+			PlatformInfo platformInfo);
 }

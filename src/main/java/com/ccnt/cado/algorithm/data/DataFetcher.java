@@ -1,5 +1,6 @@
 package com.ccnt.cado.algorithm.data;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,6 @@ public class DataFetcher {
 	public DataStorer getDataStorer() {
 		return dataStorer;
 	}
-
 	public List<VM> getVMsData(int platformId){
 		//测试数据
 		List<VM> vms = new ArrayList<VM>();
@@ -141,5 +141,10 @@ public class DataFetcher {
 			vmCache.put((Integer)hostInfo.get("_id"), staticUnit);
 		}	
 	}
-
+	public List<Unit> getHistoryData(Date from, Date to, Deploy d) {
+		return new ArrayList<Unit>();
+	}
+	public List<Deploy> getDeploysByVM(VM vm) {
+		return new ArrayList<Deploy>();
+	}
 } 

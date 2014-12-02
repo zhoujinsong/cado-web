@@ -6,9 +6,9 @@ package com.ccnt.cado.algorithm.data;
  *
  */
 public class SysState {
-	private double usage = -1; 
-	private double variance = -1; 
-	private double score = -1; 
+	private double usage = -1;  //平均资源使用率
+	private double variance = -1; //资源使用率方差
+	private double score = -1; //评分
 	
 	public boolean betterThan(SysState anotherState){
 

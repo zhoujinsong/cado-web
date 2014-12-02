@@ -1,14 +1,10 @@
 package com.ccnt.cado.algorithm.monitor;
 import java.util.List;
-import java.util.Map;
 
 import com.ccnt.cado.algorithm.data.DataFetcher;
-import com.ccnt.cado.algorithm.data.Deploy;
 import com.ccnt.cado.algorithm.data.SysState;
 import com.ccnt.cado.algorithm.data.Unit;
 import com.ccnt.cado.algorithm.data.VM;
-import com.ccnt.cado.util.Logger;
-import com.ccnt.cado.web.bean.PlatformInfo;
 
 public class SystemMonitor {
 	private DataFetcher fetcher; //从数据库获取数据
@@ -17,23 +13,32 @@ public class SystemMonitor {
 		this.fetcher = fetcher;
 	}
 
-	public DataFetcher getFetcher() {
-		return fetcher;
+	public DataFetcher getDataFetcher(){
+		return this.fetcher;
 	}
-
-	public void setFetcher(DataFetcher fetcher) {
-		this.fetcher = fetcher;
-	}
-	//计算系统当前状态
+	/**
+	 * 计算系统当前状态
+	 * @param max
+	 * @param min
+	 * @param platformId
+	 * @param weigh
+	 * @return
+	 */
 	public SysState computeSysState(double max, double min, int platformId,Unit weigh){	
+		weigh = fomatWeigh(weigh);
 		List<VM> vms = fetcher.getVMsData(platformId);
 		return computeCurrentState(vms, max, min,weigh);
 	}
-	
+	/**
+	 * 计算评分，资源消耗率越接近max和min的中间值，分数越高
+	 * @param x
+	 * @param max
+	 * @param min
+	 * @return 评分值
+	 */
 	private double computeScore(double x, double max, double min) {
 		if(max <= min){
-			Logger.error("最大最小阈值出错");
-			return 0;
+			throw new IllegalArgumentException("最大阈值必须大于最小阈值！");
 		}
 		double best = (max - min) / 2 + min;
 		double score = 0;
@@ -49,6 +54,12 @@ public class SystemMonitor {
 		}
 		return score;
 	}
+	/**
+	 * 计算方差
+	 * @param usages
+	 * @param average
+	 * @return
+	 */
 	private double computeVariance(double[] usages, double average){
 		double result = 0;
 		for(int i = 0; i < usages.length; i++){
@@ -57,8 +68,8 @@ public class SystemMonitor {
 		return result;
 	}
 	public SysState computeCurrentState(List<VM> vms, double max, double min,Unit weigh){
+		weigh = fomatWeigh(weigh);
 		SysState state = new SysState();
-		
 		Unit used, vmstatic;
 		double usage = 0, score = 0;
 		double[] usages = new double[vms.size()];
@@ -76,31 +87,30 @@ public class SystemMonitor {
 			usage += usages[i];
 			score += this.computeScore(usages[i], max, min);
 		}
+		
 		state.setScore(score / vms.size());
 		state.setUsage(usage / vms.size());
 		state.setVariance(this.computeVariance(usages, usage / vms.size()));
 		
 		return state;
 	}
-	/*public double computeSysState(List<VM> vms, double max, double min){
-		
-		double result = 0.0;
-
-		Unit used, vmstatic;
-		for(VM vm : vms) {
-			used = vm.getUsedMetrics();
-			vmstatic
-			= vm.getStaticMetircs();
-			
-			double usage = weigh.getCpu() * used.getCpu() / vmstatic.getCpu() +
-			weigh.getMemeory() * used.getMemeory() / vmstatic.getMemeory() +
-			weigh.getIo() * used.getIo() / vmstatic.getIo() + 
-			weigh.getNet() * used.getNet() / vmstatic.getNet();
-			
-		}	
-		return result / vms.size();
-	}*/
-	//计算消耗率最大的虚拟机
+	
+	/**
+	 * 将用户传入的评分（权重）参数归一化
+	 * @param weigh
+	 * @return
+	 */
+	private Unit fomatWeigh(Unit weigh) {
+		double sum = weigh.getCpu() + weigh.getMemeory() + weigh.getIo() + weigh.getNet();
+		weigh.setCpu(weigh.getCpu() / sum);
+		weigh.setMemeory(weigh.getMemeory() / sum);
+		weigh.setIo(weigh.getIo() / sum);
+		weigh.setNet(weigh.getNet() / sum);
+		return weigh;
+	}
+	
+	/*
+	  //计算消耗率最大的虚拟机
 	public VM getTop(List<VM> vms, Unit weigh){
 		double max = Double.MIN_VALUE;
 		VM result = null;
@@ -112,7 +122,7 @@ public class SystemMonitor {
 		}
 		return result;
 	}
-	//计算消耗率最大的虚拟机
+	//计算消耗率最低的虚拟机
 	public VM getButtom(List<VM> vms, Unit weigh){
 		double min = Double.MAX_VALUE;
 		VM result = null;
@@ -198,5 +208,5 @@ public class SystemMonitor {
 			platformInfo.getNetworkWeight() * used.getNet() / vmstatic.getNet() /weigh;
 		}	
 		return usage / vms.size();
-	}
+	}*/
 }
