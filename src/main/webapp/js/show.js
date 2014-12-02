@@ -17,7 +17,7 @@ $(document).ready(function () {
 });
 //functions
 function initial(){
-	$.get("platformManagement.do?method=listPlatforms",function(data,status){
+	$.get("../platformManagement.do?method=listPlatforms",function(data,status){
 		for(var i=0;i<data.length;i++){
 			$("#platformSelect").append("<option value='"+ data[i]._id +"'>"+ data[i].platformName +"</option>");
 		}
@@ -38,11 +38,11 @@ function loadPlatformHostsInfo(platformInfoId){
 	$("#carousel").wijcarousel({
         display: 1
     });
-	$.get("platformShow.do?method=listHosts&platformInfoId=" + platformInfoId, function(data,status){
+	$.get("../platformShow.do?method=listHosts&platformInfoId=" + platformInfoId, function(data,status){
 		for(var i=0;i<data.length;i++){
 			var divStr = "<div class='flipcard'> " +
 					"<div id='front_" + data[i].hostId + "'>" +
-					"<p id=pic_'" + data[i].hostId + "'><img src='images/server_ok.png'></p>";
+					"<p id=pic_'" + data[i].hostId + "'><img src='../images/server_ok.png'></p>";
 			for(var j=0;j<data[i].instanceInfo.length;j++){
 				divStr += "<p>" + data[i].instanceInfo[j].applicationName + "." + data[i].instanceInfo[j].serviceName + "(" + data[i].instanceInfo[j].instanceId + ")</p>";
 			}
@@ -161,7 +161,7 @@ window.dispose = function () {
 };
 
 function getHostMonitorData(hostId){
-	$.get("platformShow.do?method=getHostMonitorData&hostId=" + hostId,function(data,status){
+	$.get("../platformShow.do?method=getHostMonitorData&hostId=" + hostId,function(data,status){
 		var divStr = "<p>CPU使用率：" + data.cpuUsagePercent + "%</p><p>内存使用：</p>" +
 		"<p>" + data.usedMemorySize + "/" + data.memorySize + "</p>";
 		var num = data.usedIOSpeed / data.ioReadSpeed * 100.0;
@@ -171,7 +171,7 @@ function getHostMonitorData(hostId){
 	});
 }
 function getSystemUsage(platformInfoId){
-	$.get("platformShow.do?method=loadSystemUsage&platformInfoId=" + platformInfoId,function(data,status){
+	$.get("../platformShow.do?method=loadSystemUsage&platformInfoId=" + platformInfoId,function(data,status){
 		systemUsageData.push({time:new Date(),usage:data.usage});
 		if (systemUsageData.length > 10) {
 			systemUsageData.splice(0, 1);

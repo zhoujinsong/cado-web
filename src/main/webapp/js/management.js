@@ -29,7 +29,7 @@ $(document).ready(function () {
 	   }
 	   if(array.length > 0){
 		   $.ajax({
-			  url: "platformManagement.do?method=deletePlatforms",
+			  url: "../platformManagement.do?method=deletePlatforms",
 			  data: {"platformIds": array},
 			  dataType: "json",
 			  type: "POST",
@@ -61,7 +61,7 @@ var viewModel={
 };
 
 function getPlatformList(){
-	$.get("platformManagement.do?method=listPlatforms",function(data){
+	$.get("../platformManagement.do?method=listPlatforms",function(data){
 		var nodes = new Array();
 		nodes[0] = {
 			text: "cloudify",
